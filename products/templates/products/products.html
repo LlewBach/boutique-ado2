@@ -17,13 +17,95 @@
   <div class="row">
     <div class="col text-center mt-3">
       <h2 class="logo-font">Products</h2>
+      {% for c in current_categories %}
+      <a class="category-badge text-decoration-none" href="{% url 'products' %}?category={{ c.name }}">
+        <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">{{ c.friendly_name }}</span>
+      </a>
+      {% endfor %}
       <hr class="w-50 mb-1">
     </div>
   </div>
   <div class="row">
     <div class="col">
       <div class="product-container col-10 offset-1">
-        <div class="row mt-1 mb-2"></div>
+        <div class="row mt-1 mb-2">
+          <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
+            <div class="sort-select-wrapper w-50">
+              <select id="sort-selector"
+                class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
+                {% if current_sorting == 'None_None' %}
+                <option value="reset" selected>Sort by...</option>
+                {% else %}
+                <option value="reset">Sort by...</option>
+                {% endif %}
+                {% if current_sorting == 'price_asc' %}
+                <option value="price_asc" selected>Price (low to high)
+                </option>
+                {% else %}
+                <option value="price_asc">Price (low to high)
+                </option>
+                {% endif %}
+                {% if current_sorting == 'price_desc' %}
+                <option value="price_desc" selected>Price (high to low)
+                </option>
+                {% else %}
+                <option value="price_desc">Price (high to low)
+                </option>
+                {% endif %}
+                {% if current_sorting == 'rating_asc' %}
+                <option value="rating_asc" selected>Rating (low to
+                  high)</option>
+                {% else %}
+                <option value="rating_asc">Rating (low to
+                  high)</option>
+                {% endif %}
+                {% if current_sorting == 'rating_desc' %}
+                <option value="rating_desc" selected>Rating (high to
+                  low)</option>
+                {% else %}
+                <option value="rating_desc">Rating (high to
+                  low)</option>
+                {% endif %}
+                {% if current_sorting == 'name_asc' %}
+                <option value="name_asc" selected>Name (A-Z)</option>
+                {% else %}
+                <option value="name_asc">Name (A-Z)</option>
+                {% endif %}
+                {% if current_sorting == 'name_desc' %}
+                <option value="name_desc" selected>Name (Z-A)</option>
+                {% else %}
+                <option value="name_desc">Name (Z-A)</option>
+                {% endif %}
+                {% if current_sorting == 'category_asc' %}
+                <option value="category_asc" selected>Category (A-Z)
+                </option>
+                {% else %}
+                <option value="category_asc">Category (A-Z)
+                </option>
+                {% endif %}
+                {% if current_sorting == 'category_desc' %}
+                <option value="category_desc" selected>Category
+                  (Z-A)</option>
+                {% else %}
+                <option value="category_desc">Category
+                  (Z-A)</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 order-md-first">
+            <p class="text-muted mt-3 text-center text-md-left">
+              {% if search_term or current_categories or current_sorting != 'None_None' %}
+              <span class="small"><a href="{% url 'products' %}">Products Home</a> | </span>
+              {% endif %}
+              {% if search_term %}
+              {{ products|length }} Products found for <strong>"{{ search_term }}"</strong>
+              {% else %}
+              {{ products|length }} Products
+              {% endif %}
+            </p>
+          </div>
+        </div>
         <div class="row">
           {% for product in products %}
           <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
@@ -44,6 +126,13 @@
                 <div class="row">
                   <div class="col">
                     <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
+                    {% if product.category %}
+                    <p class="small mt-1 mb-0">
+                      <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
+                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                      </a>
+                    </p>
+                    {% endif %}
                     {% if product.rating %}
                     <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
                     {% else %}
@@ -85,4 +174,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
