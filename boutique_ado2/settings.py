@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os 
 from pathlib import Path
-import os
+
+# Load env variables from env.py if it exists
+env_path = Path(__file__).resolve().parent / 'env.py'
+if env_path.exists():
+    exec(open(env_path).read())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +50,7 @@ INSTALLED_APPS = [
     'products',
     'bag',
     'checkout',
+    # 'crispy',
 
     # Other
     'crispy_forms',
@@ -172,5 +178,9 @@ ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
+# Stripe
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10
+STRIPE_CURRENCY = 'usd'
+# STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+# STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')

@@ -2,3 +2,4 @@
 *.pyc
 __pycache__
 .venv/
+boutique_ado2/env.py
