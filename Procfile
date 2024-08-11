@@ -1,0 +1,1 @@
+web: gunicorn boutique-ado2.wsgi:application
